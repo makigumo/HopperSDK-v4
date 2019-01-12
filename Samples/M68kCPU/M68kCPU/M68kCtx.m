@@ -23,7 +23,22 @@
     if (self = [super init]) {
         _cpu = cpu;
         _file = file;
-        if (cs_open(CS_ARCH_M68K, CS_MODE_32, &_handle) != CS_ERR_OK) {
+        cs_mode mode = CS_MODE_32;
+        if ([file.cpuSubFamily isEqualToString:@"68000"]) {
+            mode |= CS_MODE_M68K_000;
+        } else if ([file.cpuSubFamily isEqualToString:@"68010"]) {
+            mode |= CS_MODE_M68K_010;
+        } else if ([file.cpuSubFamily isEqualToString:@"68020"]) {
+            mode |= CS_MODE_M68K_020;
+        } else if ([file.cpuSubFamily isEqualToString:@"68030"]) {
+            mode |= CS_MODE_M68K_030;
+        } else if ([file.cpuSubFamily isEqualToString:@"68040"]) {
+            mode |= CS_MODE_M68K_040;
+        } else if ([file.cpuSubFamily isEqualToString:@"68060"]) {
+            mode |= CS_MODE_M68K_060;
+        }
+        mode |= CS_MODE_M68K_040;
+        if (cs_open(CS_ARCH_M68K, mode, &_handle) != CS_ERR_OK) {
             return nil;
         }
         cs_option(_handle, CS_OPT_DETAIL, CS_OPT_ON);

@@ -58,7 +58,7 @@ void OSWriteBigInt16(void *address, uintptr_t offset, int16_t data) {
 }
 
 - (NSString *)pluginDescription {
-    return @"Motorola 68000 CPU support";
+    return @"Motorola 680x0 CPU support";
 }
 
 - (NSString *)pluginAuthor {
@@ -82,17 +82,33 @@ void OSWriteBigInt16(void *address, uintptr_t offset, int16_t data) {
 }
 
 - (NSArray *)cpuSubFamiliesForFamily:(NSString *)family {
-    if ([family isEqualToString:@"motorola"]) return @[@"68000"];
+    if ([family isEqualToString:@"motorola"]) {
+        return @[@"68000", @"68010", @"68020", @"68030", @"68040", @"68060"];
+    }
     return nil;
 }
 
 - (int)addressSpaceWidthInBitsForCPUFamily:(NSString *)family andSubFamily:(NSString *)subFamily {
-    if ([family isEqualToString:@"motorola"] && [subFamily isEqualToString:@"68000"]) return 32;
+    if ([family isEqualToString:@"motorola"]) {
+        if ([subFamily isEqualToString:@"68000"]) return 32;
+        if ([subFamily isEqualToString:@"68010"]) return 32;
+        if ([subFamily isEqualToString:@"68020"]) return 32;
+        if ([subFamily isEqualToString:@"68030"]) return 32;
+        if ([subFamily isEqualToString:@"68040"]) return 32;
+        if ([subFamily isEqualToString:@"68060"]) return 32;
+    }
     return 0;
 }
 
 - (int)integerWidthInBitsForCPUFamily:(NSString *)family andSubFamily:(NSString *)subFamily {
-    if ([family isEqualToString:@"motorola"] && [subFamily isEqualToString:@"68000"]) return 32;
+    if ([family isEqualToString:@"motorola"]) {
+        if ([subFamily isEqualToString:@"68000"]) return 32;
+        if ([subFamily isEqualToString:@"68010"]) return 32;
+        if ([subFamily isEqualToString:@"68020"]) return 32;
+        if ([subFamily isEqualToString:@"68030"]) return 32;
+        if ([subFamily isEqualToString:@"68040"]) return 32;
+        if ([subFamily isEqualToString:@"68060"]) return 32;
+    }
     return 0;
 }
 

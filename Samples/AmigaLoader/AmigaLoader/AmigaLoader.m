@@ -108,7 +108,7 @@ typedef NS_ENUM(uint32_t, HUNK_TYPE) {
 }
 
 // Returns an array of DetectedFileType objects.
-- (NSArray *)detectedTypesForData:(NSData *)data ofFileNamed:(NSString *)filename {
+- (NSArray<NSObject<HPDetectedFileType> *> *)detectedTypesForData:(NSData *)data ofFileNamed:(NSString *)filename {
     if ([data length] < 4) return @[];
 
     const void *bytes = (const void *)[data bytes];
@@ -117,8 +117,9 @@ typedef NS_ENUM(uint32_t, HUNK_TYPE) {
         [type setFileDescription:@"Amiga Executable"];
         [type setAddressWidth:AW_32bits];
         [type setCpuFamily:@"motorola"];
-        [type setCpuSubFamily:@"68000"];
+        [type setCpuSubFamily:@"68040"];
         [type setShortDescriptionString:@"amiga_hunk"];
+        //type.additionalParameters = @[[_services cpuComponentWithLabel:@"CPU"]];
         return @[type];
     }
 
