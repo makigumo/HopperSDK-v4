@@ -21,20 +21,24 @@
 - (BOOL)canLoadDebugFiles;
 
 /// Returns an array of DetectedFileType objects.
-- (nullable NSArray<NSObject<HPDetectedFileType> *> *)detectedTypesForData:(nonnull NSData *)data ofFileNamed:(nullable NSString *)filename;
+- (nullable NSArray<NSObject<HPDetectedFileType> *> *)detectedTypesForData:(nonnull const void *)bytes
+                                                                    length:(size_t)length
+                                                               ofFileNamed:(nullable NSString *)filename;
 
 /// Load a file.
 /// The plugin should create HPSegment and HPSection objects.
 /// It should also fill information about the CPU by setting the CPU family, the CPU subfamily and optionally the CPU plugin UUID.
 /// The CPU plugin UUID should be set ONLY if you want a specific CPU plugin to be used. If you don't set it, it will be later set by Hopper.
 /// During long operations, you should call the provided "callback" block to give a feedback to the user on the loading process.
-- (FileLoaderLoadingStatus)loadData:(nonnull NSData *)data
+- (FileLoaderLoadingStatus)loadData:(nonnull const void *)bytes
+                             length:(size_t)length
               usingDetectedFileType:(nonnull NSObject<HPDetectedFileType> *)fileType
                             options:(FileLoaderOptions)options
                             forFile:(nonnull NSObject<HPDisassembledFile> *)file
                       usingCallback:(nullable FileLoadingCallbackInfo)callback;
 
-- (FileLoaderLoadingStatus)loadDebugData:(nonnull NSData *)data
+- (FileLoaderLoadingStatus)loadDebugData:(nonnull const void *)bytes
+                                  length:(size_t)length
                                  forFile:(nonnull NSObject<HPDisassembledFile> *)file
                            usingCallback:(nullable FileLoadingCallbackInfo)callback;
 
@@ -42,11 +46,14 @@
 /// The address of every segment was shifted of "slide" bytes.
 - (void)fixupRebasedFile:(nonnull NSObject<HPDisassembledFile> *)file
                withSlide:(int64_t)slide
-        originalFileData:(nonnull NSData *)fileData;
+        originalFileData:(nonnull const void *)fileBytes
+                  length:(size_t)length;
+
 
 /// Extract a file
 /// In the case of a "composite loader", extract the NSData object of the selected file.
-- (nullable NSData *)extractFromData:(nonnull NSData *)data
+- (nullable NSData *)extractFromData:(nonnull const void *)bytes
+                              length:(size_t)length
                usingDetectedFileType:(nonnull NSObject<HPDetectedFileType> *)fileType
                     originalFileName:(nullable NSString *)filename
                   returnAdjustOffset:(nullable uint64_t *)adjustOffset
