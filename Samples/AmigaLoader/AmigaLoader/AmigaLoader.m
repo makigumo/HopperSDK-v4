@@ -108,11 +108,10 @@ typedef NS_ENUM(uint32_t, HUNK_TYPE) {
 }
 
 // Returns an array of DetectedFileType objects.
-- (NSArray *)detectedTypesForData:(NSData *)data ofFileNamed:(NSString *)filename {
-    if ([data length] < 4) return @[];
+- (NSArray *)detectedTypesForData:(const void *)fileBytes length:(size_t)fileLength ofFileNamed:(NSString *)filename {
+    if (fileLength < 4) return @[];
 
-    const void *bytes = (const void *)[data bytes];
-    if (OSReadBigInt32(bytes, 0) == HUNK_HEADER) {
+    if (OSReadBigInt32(fileBytes, 0) == HUNK_HEADER) {
         NSObject<HPDetectedFileType> *type = [_services detectedType];
         [type setFileDescription:@"Amiga Executable"];
         [type setAddressWidth:AW_32bits];
@@ -125,26 +124,28 @@ typedef NS_ENUM(uint32_t, HUNK_TYPE) {
     return @[];
 }
 
-- (FileLoaderLoadingStatus)loadData:(NSData *)data usingDetectedFileType:(NSObject<HPDetectedFileType> *)fileType options:(FileLoaderOptions)options forFile:(NSObject<HPDisassembledFile> *)file usingCallback:(FileLoadingCallbackInfo)callback {
-    const void *firstByte = (const void *)[data bytes];
-    const void *lastByte = firstByte + [data length];
+#define INCREMENT_PTR(P,V) P = (const void *) ((uintptr_t) P + (V))
+
+- (FileLoaderLoadingStatus)loadData:(const void *)fileBytes length:(size_t)fileLength usingDetectedFileType:(NSObject<HPDetectedFileType> *)fileType options:(FileLoaderOptions)options forFile:(NSObject<HPDisassembledFile> *)file usingCallback:(FileLoadingCallbackInfo)callback {
+    const void *firstByte = (const void *)fileBytes;
+    const void *lastByte = firstByte + fileLength;
 
     const void *bytes = firstByte;
     if (OSReadBigInt32(bytes, 0) != HUNK_HEADER) return DIS_BadFormat;
-    bytes += 4;
+    INCREMENT_PTR(bytes, 4);
 
     // Read resident library names
     while (bytes < lastByte) {
-        uint32_t stringLength = OSReadBigInt32(bytes, 0); bytes += 4;
+        uint32_t stringLength = OSReadBigInt32(bytes, 0); INCREMENT_PTR(bytes, 4);
         if (stringLength == 0) break;
-        bytes += stringLength * 4;
+        INCREMENT_PTR(bytes, stringLength * 4);
     }
 
-    uint32_t tableSize = OSReadBigInt32(bytes, 0); bytes += 4;
-    uint32_t firstHunk = OSReadBigInt32(bytes, 0); bytes += 4;
-    uint32_t lastHunk = OSReadBigInt32(bytes, 0); bytes += 4;
+    uint32_t tableSize = OSReadBigInt32(bytes, 0); INCREMENT_PTR(bytes, 4);
+    uint32_t firstHunk = OSReadBigInt32(bytes, 0); INCREMENT_PTR(bytes, 4);
+    uint32_t lastHunk = OSReadBigInt32(bytes, 0); INCREMENT_PTR(bytes, 4);
     const void *sizes = bytes;
-    bytes += (lastHunk - firstHunk + 1) * 4;
+    INCREMENT_PTR(bytes, (lastHunk - firstHunk + 1) * 4);
 
     uint32_t *loadAddresses = (uint32_t *)alloca(sizeof(uint32_t) * tableSize);
     uint32_t firstAddress = 0x1000;
@@ -159,14 +160,14 @@ typedef NS_ENUM(uint32_t, HUNK_TYPE) {
     NSObject<HPSegment> *currentSegment = nil;
 
     while (bytes < lastByte) {
-        float progress = (float) (bytes - firstByte) / (float) (lastByte - firstByte);
+        float progress = (float) ((uintptr_t) bytes - (uintptr_t) firstByte) / (float) ((uintptr_t) lastByte - (uintptr_t) firstByte);
         callback(@"Loading Amiga File", progress);
 
-        uint32_t hunk_id = OSReadBigInt32(bytes, 0); bytes += 4;
+        uint32_t hunk_id = OSReadBigInt32(bytes, 0); INCREMENT_PTR(bytes, 4);
         hunk_id &= 0x3FFFFFFF;
 
         if (hunk_id == HUNK_CODE || hunk_id == HUNK_DATA || hunk_id == HUNK_BSS) {
-            uint32_t sizeInWords = OSReadBigInt32(bytes, 0); bytes += 4;
+            uint32_t sizeInWords = OSReadBigInt32(bytes, 0); INCREMENT_PTR(bytes, 4);
             // BOOL inFastMem = ((size & 0x80000000) != 0);
             // BOOL inChipMem = ((size & 0x40000000) != 0);
             sizeInWords &= 0x3FFFFFFF;
@@ -200,21 +201,21 @@ typedef NS_ENUM(uint32_t, HUNK_TYPE) {
                 if (hunk_id != HUNK_BSS) {
                     NSData *segmentData = [NSData dataWithBytes:bytes length:sizeInBytes];
                     segment.mappedData = segmentData;
-                    segment.fileOffset = bytes - [data bytes];
+                    segment.fileOffset = bytes - fileBytes;
                     segment.fileLength = sizeInBytes;
                     section.fileOffset = segment.fileOffset;
                     section.fileLength = segment.fileLength;
-                    bytes += sizeInBytes;
+                    INCREMENT_PTR(bytes, sizeInBytes);
                 }
             }
         }
         else if (hunk_id == HUNK_RELOC32) {
             while (1) {
-                uint32_t count = OSReadBigInt32(bytes, 0); bytes += 4;
+                uint32_t count = OSReadBigInt32(bytes, 0); INCREMENT_PTR(bytes, 4);
                 if (count == 0) break;
-                uint32_t target_hunk_number = OSReadBigInt32(bytes, 0); bytes += 4;
+                uint32_t target_hunk_number = OSReadBigInt32(bytes, 0); INCREMENT_PTR(bytes, 4);
                 for (uint32_t i=0; i<count; i++) {
-                    uint32_t offset = OSReadBigInt32(bytes, 0); bytes += 4;
+                    uint32_t offset = OSReadBigInt32(bytes, 0); INCREMENT_PTR(bytes, 4);
                     uint32_t original = OSReadBigInt32([currentSegment.mappedData bytes], offset);
                     original += loadAddresses[target_hunk_number];
                     OSWriteBigInt32((void *)[currentSegment.mappedData bytes], offset, original);
@@ -223,11 +224,11 @@ typedef NS_ENUM(uint32_t, HUNK_TYPE) {
         }
         else if (hunk_id == HUNK_RELOC32SHORT || hunk_id == HUNK_DRELOC32 || hunk_id == HUNK_ABSRELOC16) {
             while (1) {
-                uint32_t count = OSReadBigInt16(bytes, 0); bytes += 2;
+                uint32_t count = OSReadBigInt16(bytes, 0); INCREMENT_PTR(bytes, 2);
                 if (count == 0) break;
-                uint32_t target_hunk_number = OSReadBigInt16(bytes, 0); bytes += 2;
+                uint32_t target_hunk_number = OSReadBigInt16(bytes, 0); INCREMENT_PTR(bytes, 2);
                 for (uint32_t i=0; i<count; i++) {
-                    uint32_t offset = OSReadBigInt16(bytes, 0); bytes += 2;
+                    uint32_t offset = OSReadBigInt16(bytes, 0); INCREMENT_PTR(bytes, 2);
                     uint32_t original = OSReadBigInt32([currentSegment.mappedData bytes], offset);
                     if (hunk_id == HUNK_ABSRELOC16) {
                         original -= (uint32_t) (currentSegment.startAddress + offset);
@@ -253,15 +254,16 @@ typedef NS_ENUM(uint32_t, HUNK_TYPE) {
     return DIS_OK;
 }
 
-- (void)fixupRebasedFile:(NSObject<HPDisassembledFile> *)file withSlide:(int64_t)slide originalFileData:(NSData *)fileData {
+- (void)fixupRebasedFile:(NSObject<HPDisassembledFile> *)file withSlide:(int64_t)slide originalFileData:(nonnull const void *)fileBytes length:(size_t)length {
     
 }
 
-- (FileLoaderLoadingStatus)loadDebugData:(NSData *)data forFile:(NSObject<HPDisassembledFile> *)file usingCallback:(FileLoadingCallbackInfo)callback {
+- (FileLoaderLoadingStatus)loadDebugData:(const void *)fileBytes length:(size_t)fileLength forFile:(NSObject<HPDisassembledFile> *)file usingCallback:(FileLoadingCallbackInfo)callback {
     return DIS_NotSupported;
 }
 
-- (NSData *)extractFromData:(NSData *)data
+- (NSData *)extractFromData:(const void *)fileBytes
+                     length:(size_t)fileLength
       usingDetectedFileType:(NSObject<HPDetectedFileType> *)fileType
            originalFileName:(NSString *)filename
          returnAdjustOffset:(uint64_t *)adjustOffset
