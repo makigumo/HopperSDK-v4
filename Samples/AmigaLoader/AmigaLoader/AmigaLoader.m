@@ -108,7 +108,7 @@ typedef NS_ENUM(uint32_t, HUNK_TYPE) {
 }
 
 // Returns an array of DetectedFileType objects.
-- (NSArray *)detectedTypesForData:(const void *)fileBytes length:(size_t)fileLength ofFileNamed:(NSString *)filename {
+- (NSArray *)detectedTypesForData:(const void *)fileBytes length:(size_t)fileLength ofFileNamed:(NSString *)filename atPath:(nullable NSString *)fileFullPath {
     if (fileLength < 4) return @[];
 
     if (OSReadBigInt32(fileBytes, 0) == HUNK_HEADER) {
@@ -126,7 +126,7 @@ typedef NS_ENUM(uint32_t, HUNK_TYPE) {
 
 #define INCREMENT_PTR(P,V) P = (const void *) ((uintptr_t) P + (V))
 
-- (FileLoaderLoadingStatus)loadData:(const void *)fileBytes length:(size_t)fileLength usingDetectedFileType:(NSObject<HPDetectedFileType> *)fileType options:(FileLoaderOptions)options forFile:(NSObject<HPDisassembledFile> *)file usingCallback:(FileLoadingCallbackInfo)callback {
+- (FileLoaderLoadingStatus)loadData:(const void *)fileBytes length:(size_t)fileLength originalPath:(NSString *)fileFullPath usingDetectedFileType:(NSObject<HPDetectedFileType> *)fileType options:(FileLoaderOptions)options forFile:(NSObject<HPDisassembledFile> *)file usingCallback:(FileLoadingCallbackInfo)callback {
     const void *firstByte = (const void *)fileBytes;
     const void *lastByte = firstByte + fileLength;
 
@@ -254,11 +254,19 @@ typedef NS_ENUM(uint32_t, HUNK_TYPE) {
     return DIS_OK;
 }
 
-- (void)fixupRebasedFile:(NSObject<HPDisassembledFile> *)file withSlide:(int64_t)slide originalFileData:(nonnull const void *)fileBytes length:(size_t)length {
+- (void)fixupRebasedFile:(NSObject<HPDisassembledFile> *)file
+               withSlide:(int64_t)slide
+        originalFileData:(nonnull const void *)fileBytes
+                  length:(size_t)length
+            originalPath:(nullable NSString *)fileFullPath {
     
 }
 
-- (FileLoaderLoadingStatus)loadDebugData:(const void *)fileBytes length:(size_t)fileLength forFile:(NSObject<HPDisassembledFile> *)file usingCallback:(FileLoadingCallbackInfo)callback {
+- (FileLoaderLoadingStatus)loadDebugData:(const void *)fileBytes
+                                  length:(size_t)fileLength
+                            originalPath:(NSString *)fileFullPath
+                                 forFile:(NSObject<HPDisassembledFile> *)file
+                           usingCallback:(FileLoadingCallbackInfo)callback {
     return DIS_NotSupported;
 }
 
@@ -266,12 +274,16 @@ typedef NS_ENUM(uint32_t, HUNK_TYPE) {
                      length:(size_t)fileLength
       usingDetectedFileType:(NSObject<HPDetectedFileType> *)fileType
            originalFileName:(NSString *)filename
+               originalPath:(NSString *)fileFullPath
          returnAdjustOffset:(uint64_t *)adjustOffset
        returnAdjustFilename:(NSString *__autoreleasing *)newFilename {
     return nil;
 }
 
-- (void)setupFile:(nonnull NSObject<HPDisassembledFile> *)file afterExtractionOf:(nonnull NSString *)filename type:(nonnull NSObject<HPDetectedFileType> *)fileType {
+- (void)setupFile:(nonnull NSObject<HPDisassembledFile> *)file
+afterExtractionOf:(nonnull NSString *)filename
+     originalPath:(NSString *)fileFullPath
+             type:(nonnull NSObject<HPDetectedFileType> *)fileType {
 
 }
 
