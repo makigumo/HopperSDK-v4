@@ -8,6 +8,7 @@
 
 import Foundation
 
+@objc
 class SwiftSampleTool : NSObject, HopperTool {
     var services: HPHopperServices!
 

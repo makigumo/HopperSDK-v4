@@ -43,6 +43,6 @@
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © Cryptic Apps. All rights reserved.</string>
 	<key>NSPrincipalClass</key>
-	<string>SampleTool</string>
+	<string>SampleTool.SwiftSampleTool</string>
 </dict>
 </plist>
