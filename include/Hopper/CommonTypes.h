@@ -32,26 +32,37 @@ typedef struct {
 typedef uint32_t Color;
 #define NO_COLOR 0
 
-#if defined(__OBJC__)
-# if defined(NS_ENUM)
-#  define HP_BEGIN_DECL_ENUM(BASE,TYPE) typedef NS_ENUM(BASE,TYPE)
-#  define HP_END_DECL_ENUM(TYPE)
-# else
-#  define HP_BEGIN_DECL_ENUM(BASE,TYPE) typedef enum TYPE : BASE TYPE; enum TYPE : BASE
-#  define HP_END_DECL_ENUM(TYPE)
-# endif
-# if defined(NS_OPTIONS)
-#  define HP_BEGIN_DECL_OPTIONS(BASE,TYPE) typedef NS_OPTIONS(BASE,TYPE)
-#  define HP_END_DECL_OPTIONS(TYPE)
-# else
-#  define HP_BEGIN_DECL_OPTIONS(BASE,TYPE) typedef enum TYPE : BASE TYPE; enum TYPE : BASE
-#  define HP_END_DECL_OPTIONS(TYPE)
-# endif
+#if defined(__cplusplus)
+# define HP_BEGIN_DECL_ENUM(BASE,TYPE) typedef enum : BASE
+# define HP_END_DECL_ENUM(TYPE) TYPE
+# define HP_BEGIN_DECL_OPTIONS(BASE,TYPE) \
+    enum _k ## TYPE : BASE; \
+    inline _k ## TYPE operator|(enum _k ## TYPE a, enum _k ## TYPE b) { return (enum _k ## TYPE) ((BASE)a | (BASE)b); } \
+    inline _k ## TYPE operator|=(enum _k ## TYPE a, enum _k ## TYPE b) { return (enum _k ## TYPE) ((BASE)a | (BASE)b); } \
+    typedef enum _k ## TYPE: BASE
+# define HP_END_DECL_OPTIONS(TYPE) TYPE ;
 #else
-#  define HP_BEGIN_DECL_ENUM(BASE,TYPE) typedef enum : BASE
-#  define HP_END_DECL_ENUM(TYPE) TYPE
-#  define HP_BEGIN_DECL_OPTIONS(BASE,TYPE) typedef enum : BASE
-#  define HP_END_DECL_OPTIONS(TYPE) TYPE
+# if defined(__OBJC__)
+#  if defined(NS_ENUM)
+#   define HP_BEGIN_DECL_ENUM(BASE,TYPE) typedef NS_ENUM(BASE,TYPE)
+#   define HP_END_DECL_ENUM(TYPE)
+#  else
+#   define HP_BEGIN_DECL_ENUM(BASE,TYPE) typedef enum TYPE : BASE TYPE; enum TYPE : BASE
+#   define HP_END_DECL_ENUM(TYPE)
+#  endif
+#  if defined(NS_OPTIONS)
+#   define HP_BEGIN_DECL_OPTIONS(BASE,TYPE) typedef NS_OPTIONS(BASE,TYPE)
+#   define HP_END_DECL_OPTIONS(TYPE)
+#  else
+#   define HP_BEGIN_DECL_OPTIONS(BASE,TYPE) typedef enum TYPE : BASE TYPE; enum TYPE : BASE
+#   define HP_END_DECL_OPTIONS(TYPE)
+#  endif
+# else
+#   define HP_BEGIN_DECL_ENUM(BASE,TYPE) typedef enum : BASE
+#   define HP_END_DECL_ENUM(TYPE) TYPE
+#   define HP_BEGIN_DECL_OPTIONS(BASE,TYPE) typedef enum : BASE
+#   define HP_END_DECL_OPTIONS(TYPE) TYPE
+#  endif
 #endif
 
 HP_BEGIN_DECL_ENUM(uint8_t, ByteType) {
