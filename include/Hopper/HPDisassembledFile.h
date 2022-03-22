@@ -229,9 +229,10 @@ typedef void (^FileLoadingCallbackInfo)(NSString * _Nonnull desc, float progress
 - (nonnull NSObject<HPTypeDesc> *)ushortPtrType;
 - (nonnull NSObject<HPTypeDesc> *)boolPtrType;
 
-- (nonnull NSObject<HPTypeDesc> *)structureType; /// Build a new empty struct
-- (nonnull NSObject<HPTypeDesc> *)unionType;     /// Build a new empty union
-- (nonnull NSObject<HPTypeDesc> *)enumType;      /// Build a new empty enum
+- (nonnull NSObject<HPTypeDesc> *)structureType;                                                /// Build a new empty struct
+- (nonnull NSObject<HPTypeDesc> *)unionType;                                                    /// Build a new empty union
+- (nonnull NSObject<HPTypeDesc> *)enumType;                                                     /// Build a new empty enum
+- (nonnull NSObject<HPTypeDesc> *)enumTypeWithBaseType:(nonnull NSObject<HPTypeDesc> *)base;    /// Build a new enum with a given base type as storage
 
 - (nonnull NSObject<HPTypeDesc> *)pointerTypeOn:(nonnull NSObject<HPTypeDesc> *)base;   /// Find the type, or build a new one.
 - (nonnull NSObject<HPTypeDesc> *)arrayTypeOf:(nonnull NSObject<HPTypeDesc> *)base withCount:(NSUInteger)count;
