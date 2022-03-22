@@ -60,8 +60,6 @@
 - (nonnull NSObject<HPTypeEnumField> *)insertEnumFieldWithName:(nullable NSString *)name andValue:(int64_t)value atIndex:(NSUInteger)index;
 - (BOOL)removeEnumField:(nonnull NSObject<HPTypeEnumField> *)field;
 - (BOOL)removeAllEnumFields;
-- (int)enumSize;
-- (void)setEnumSize:(int)sizeInBytes;
 
 // Function pointers
 - (nullable NSObject<HPMethodSignature> *)signature;
