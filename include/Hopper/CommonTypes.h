@@ -38,7 +38,7 @@ typedef uint32_t Color;
 # define HP_BEGIN_DECL_OPTIONS(BASE,TYPE) \
     enum _k ## TYPE : BASE; \
     inline _k ## TYPE operator|(enum _k ## TYPE a, enum _k ## TYPE b) { return (enum _k ## TYPE) ((BASE)a | (BASE)b); } \
-    inline _k ## TYPE operator|=(enum _k ## TYPE a, enum _k ## TYPE b) { return (enum _k ## TYPE) ((BASE)a | (BASE)b); } \
+    inline _k ## TYPE operator|=(enum _k ## TYPE &a, enum _k ## TYPE b) { return (a = (enum _k ## TYPE) ((BASE)a | (BASE)b)); } \
     typedef enum _k ## TYPE: BASE
 # define HP_END_DECL_OPTIONS(TYPE) TYPE ;
 #else
