@@ -241,6 +241,11 @@
 			attributes = {
 				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = "Cryptic Apps";
+				TargetAttributes = {
+					07F966D318C5BA1200B394AF = {
+						ProvisioningStyle = Automatic;
+					};
+				};
 			};
 			buildConfigurationList = 07F966CF18C5BA1200B394AF /* Build configuration list for PBXProject "M68kCPU" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -431,7 +436,10 @@
 		07F966E318C5BA1200B394AF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "M68kCPU/M68kCPU-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -448,6 +456,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.cryptic-apps.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				WRAPPER_EXTENSION = hopperCPU;
 			};
 			name = Debug;
@@ -455,7 +464,10 @@
 		07F966E418C5BA1200B394AF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "M68kCPU/M68kCPU-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -472,6 +484,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.cryptic-apps.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				WRAPPER_EXTENSION = hopperCPU;
 			};
 			name = Release;

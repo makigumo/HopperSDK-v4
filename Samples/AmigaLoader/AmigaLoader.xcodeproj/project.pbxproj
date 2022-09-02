@@ -109,6 +109,11 @@
 			attributes = {
 				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = "Cryptic Apps";
+				TargetAttributes = {
+					076B713818C4D07F00DE7FD0 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
 			};
 			buildConfigurationList = 076B713418C4D07F00DE7FD0 /* Build configuration list for PBXProject "AmigaLoader" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -279,7 +284,10 @@
 		076B714818C4D07F00DE7FD0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AmigaLoader/AmigaLoader-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -291,6 +299,7 @@
 				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Application Support/Hopper/PlugIns/V4/Loaders";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.cryptic-apps.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				WRAPPER_EXTENSION = hopperLoader;
 			};
 			name = Debug;
@@ -298,7 +307,10 @@
 		076B714918C4D07F00DE7FD0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AmigaLoader/AmigaLoader-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -310,6 +322,7 @@
 				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Application Support/Hopper/PlugIns/V4/Loaders";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.cryptic-apps.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				WRAPPER_EXTENSION = hopperLoader;
 			};
 			name = Release;
