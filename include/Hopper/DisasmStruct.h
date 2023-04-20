@@ -136,29 +136,29 @@ typedef enum {
 } DisasmEflagsState;
 
 typedef enum {
-    DISASM_BRANCH_JNO = -1,
-    DISASM_BRANCH_JNC = -2,
-    DISASM_BRANCH_JNB = DISASM_BRANCH_JNC,
-    DISASM_BRANCH_JNE = -3,
-    DISASM_BRANCH_JNA = -4,
-    DISASM_BRANCH_JNS = -5,
-    DISASM_BRANCH_JNP = -6,
-    DISASM_BRANCH_JNL = -7,
-    DISASM_BRANCH_JNG = -8,
+    DISASM_BRANCH_JNO = -1,                 // Jump if not overflow
+    DISASM_BRANCH_JNC = -2,                 // Jump if not carry
+    DISASM_BRANCH_JNB = DISASM_BRANCH_JNC,  // Jump if not below
+    DISASM_BRANCH_JNE = -3,                 // Jump if not equal
+    DISASM_BRANCH_JNA = -4,                 // Jump if not above
+    DISASM_BRANCH_JNS = -5,                 // Jump if not sign
+    DISASM_BRANCH_JNP = -6,                 // Jump if not parity
+    DISASM_BRANCH_JNL = -7,                 // Jump if not less
+    DISASM_BRANCH_JNG = -8,                 // Jump if not greater
 
     DISASM_BRANCH_NONE = 0,
 
-    DISASM_BRANCH_JO = 1,
-    DISASM_BRANCH_JC = 2,
-    DISASM_BRANCH_JB = DISASM_BRANCH_JC,
-    DISASM_BRANCH_JE = 3,
-    DISASM_BRANCH_JA = 4,
-    DISASM_BRANCH_JS = 5,
-    DISASM_BRANCH_JP = 6,
-    DISASM_BRANCH_JL = 7,
-    DISASM_BRANCH_JG = 8,
-    DISASM_BRANCH_JLE = DISASM_BRANCH_JNG,
-    DISASM_BRANCH_JGE = DISASM_BRANCH_JNL,
+    DISASM_BRANCH_JO = 1,                   // Jump if overflow (OF=1)
+    DISASM_BRANCH_JC = 2,                   // Jump if carry (CF=1)
+    DISASM_BRANCH_JB = DISASM_BRANCH_JC,    // Jump if below (CF=1)
+    DISASM_BRANCH_JE = 3,                   // Jump if equal (ZF=1)
+    DISASM_BRANCH_JA = 4,                   // Jump if above (CF=0 and ZF=0)
+    DISASM_BRANCH_JS = 5,                   // Jump if sign (SF=1)
+    DISASM_BRANCH_JP = 6,                   // Jump if parity even (PF=1)
+    DISASM_BRANCH_JL = 7,                   // Jump if less (SF != OF)
+    DISASM_BRANCH_JG = 8,                   // Jump if greater (ZF=0 and SF=OF)
+    DISASM_BRANCH_JLE = DISASM_BRANCH_JNG,  // Jump if lower or equal (i.e. not greater)
+    DISASM_BRANCH_JGE = DISASM_BRANCH_JNL,  // Jump if greater or equal (i.e. not lower)
 
     DISASM_BRANCH_JECXZ = 10,
 
