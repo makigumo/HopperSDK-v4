@@ -199,6 +199,15 @@ HP_END_DECL_ENUM(RegClass);
 
 // File Loaders
 
+HP_BEGIN_DECL_ENUM(NSUInteger, DFTPriority) {
+    DFTP_VeryLow,
+    DFTP_Low,
+    DFTP_Normal,
+    DFTP_High,
+    DFTP_VeryHigh
+}
+HP_END_DECL_ENUM(DFTPriority);
+
 HP_BEGIN_DECL_ENUM(NSUInteger, FileLoaderLoadingStatus) {
     DIS_OK,
     DIS_InvalidArguments,
