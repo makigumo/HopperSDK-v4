@@ -31,6 +31,6 @@
 
 @property (nullable, strong) NSArray *additionalParameters;       /// An array of NSObject<HPLoaderOptionComponents> that describes some additional parameters to present to the user when using this loader.
 
-@property (assign)           BOOL lowPriority;
+@property (assign)           DFTPriority priority;                /// Used to modify the order of the loaders in the dialog
 
 @end
