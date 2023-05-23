@@ -33,14 +33,22 @@
 #define DISASM_OPERAND_TYPE_AND_REG_CLASS_MASK          0xFFFFFFFF00000000llu
 
 // Type
-#define DISASM_OPERAND_NO_OPERAND                       0x8000000000000000llu       // Operand unused
-#define DISASM_OPERAND_CONSTANT_TYPE                    0x4000000000000000llu       // A constant value (in the immediate field). Can be tagged as absolute, or relative (for instance, for JMP addresses). By default, value is an integer, but it can be a float if tag is present.
-#define DISASM_OPERAND_MEMORY_TYPE                      0x2000000000000000llu       // A memory access
-#define DISASM_OPERAND_REGISTER_TYPE                    0x1000000000000000llu       // A set a registers
-#define DISASM_OPERAND_ABSOLUTE                         0x0800000000000000llu       // For constant values: this value is absolute
-#define DISASM_OPERAND_RELATIVE                         0x0400000000000000llu       // For constant values: this value is relative
-#define DISASM_OPERAND_FLOAT_CONSTANT                   0x0200000000000000llu       // For constant values: this is a floating point value
-#define DISASM_OPERAND_OTHER                            0x0100000000000000llu       // An unidentified type, store as a plain raw string in userString
+/// Operand unused
+#define DISASM_OPERAND_NO_OPERAND                       0x8000000000000000llu
+/// A constant value (in the immediate field). Can be tagged as absolute, or relative (for instance, for JMP addresses). By default, value is an integer, but it can be a float if tag is present.
+#define DISASM_OPERAND_CONSTANT_TYPE                    0x4000000000000000llu
+/// A memory access
+#define DISASM_OPERAND_MEMORY_TYPE                      0x2000000000000000llu
+/// A set a registers
+#define DISASM_OPERAND_REGISTER_TYPE                    0x1000000000000000llu
+/// For constant values: this value is absolute
+#define DISASM_OPERAND_ABSOLUTE                         0x0800000000000000llu
+/// For constant values: this value is relative
+#define DISASM_OPERAND_RELATIVE                         0x0400000000000000llu
+/// For constant values: this is a floating point value
+#define DISASM_OPERAND_FLOAT_CONSTANT                   0x0200000000000000llu
+/// An unidentified type, store as a plain raw string in userString
+#define DISASM_OPERAND_OTHER                            0x0100000000000000llu
 
 #define DISASM_BUILD_REGISTER_CLS_MASK(CLS)             (0x100000000llu << (CLS))
 #define DISASM_BUILD_REGISTER_INDEX_MASK(INDEX)         (1llu << (INDEX))
@@ -127,47 +135,75 @@ typedef enum {
 } DisasmPosition;
 
 typedef enum {
-    DISASM_EFLAGS_TESTED    = 0x01,   // the flag is tested
-    DISASM_EFLAGS_MODIFIED  = 0x02,   // the flag is modified
-    DISASM_EFLAGS_RESET     = 0x04,   // the flag is reset
-    DISASM_EFLAGS_SET       = 0x08,   // the flag is set
-    DISASM_EFLAGS_UNDEFINED = 0x10,   // undefined behavior
-    DISASM_EFLAGS_PRIOR     = 0x20    // restore prior state
+    //// The flag is tested
+    DISASM_EFLAGS_TESTED    = 0x01,
+    //// The flag is modified
+    DISASM_EFLAGS_MODIFIED  = 0x02,
+    //// The flag is reset
+    DISASM_EFLAGS_RESET     = 0x04,
+    //// The flag is set
+    DISASM_EFLAGS_SET       = 0x08,
+    //// Undefined behavior
+    DISASM_EFLAGS_UNDEFINED = 0x10,
+    //// Restore prior state
+    DISASM_EFLAGS_PRIOR     = 0x20
 } DisasmEflagsState;
 
 typedef enum {
-    DISASM_BRANCH_JNO = -1,                 // Jump if not overflow
-    DISASM_BRANCH_JNC = -2,                 // Jump if not carry
-    DISASM_BRANCH_JNB = DISASM_BRANCH_JNC,  // Jump if not below
-    DISASM_BRANCH_JNE = -3,                 // Jump if not equal
-    DISASM_BRANCH_JNA = -4,                 // Jump if not above
-    DISASM_BRANCH_JNS = -5,                 // Jump if not sign
-    DISASM_BRANCH_JNP = -6,                 // Jump if not parity
-    DISASM_BRANCH_JNL = -7,                 // Jump if not less
-    DISASM_BRANCH_JNG = -8,                 // Jump if not greater
+    /// Jump if not overflow
+    DISASM_BRANCH_JNO = -1,
+    /// Jump if not carry
+    DISASM_BRANCH_JNC = -2,
+    /// Jump if not below
+    DISASM_BRANCH_JNB = DISASM_BRANCH_JNC,
+    /// Jump if not equal
+    DISASM_BRANCH_JNE = -3,
+    /// Jump if not above
+    DISASM_BRANCH_JNA = -4,
+    /// Jump if not sign
+    DISASM_BRANCH_JNS = -5,
+    /// Jump if not parity
+    DISASM_BRANCH_JNP = -6,
+    /// Jump if not less
+    DISASM_BRANCH_JNL = -7,
+    /// Jump if not greater
+    DISASM_BRANCH_JNG = -8,
 
     DISASM_BRANCH_NONE = 0,
 
-    DISASM_BRANCH_JO = 1,                   // Jump if overflow (OF=1)
-    DISASM_BRANCH_JC = 2,                   // Jump if carry (CF=1)
-    DISASM_BRANCH_JB = DISASM_BRANCH_JC,    // Jump if below (CF=1)
-    DISASM_BRANCH_JE = 3,                   // Jump if equal (ZF=1)
-    DISASM_BRANCH_JA = 4,                   // Jump if above (CF=0 and ZF=0)
-    DISASM_BRANCH_JS = 5,                   // Jump if sign (SF=1)
-    DISASM_BRANCH_JP = 6,                   // Jump if parity even (PF=1)
-    DISASM_BRANCH_JL = 7,                   // Jump if less (SF != OF)
-    DISASM_BRANCH_JG = 8,                   // Jump if greater (ZF=0 and SF=OF)
-    DISASM_BRANCH_JLE = DISASM_BRANCH_JNG,  // Jump if lower or equal (i.e. not greater)
-    DISASM_BRANCH_JGE = DISASM_BRANCH_JNL,  // Jump if greater or equal (i.e. not lower)
+    /// Jump if overflow (OF=1)
+    DISASM_BRANCH_JO = 1,
+    /// Jump if carry (CF=1)
+    DISASM_BRANCH_JC = 2,
+    /// Jump if below (CF=1)
+    DISASM_BRANCH_JB = DISASM_BRANCH_JC,
+    /// Jump if equal (ZF=1)
+    DISASM_BRANCH_JE = 3,
+    /// Jump if above (CF=0 and ZF=0)
+    DISASM_BRANCH_JA = 4,
+    /// Jump if sign (SF=1)
+    DISASM_BRANCH_JS = 5,
+    /// Jump if parity even (PF=1)
+    DISASM_BRANCH_JP = 6,
+    /// Jump if less (SF != OF)
+    DISASM_BRANCH_JL = 7,
+    /// Jump if greater (ZF=0 and SF=OF)
+    DISASM_BRANCH_JG = 8,
+    /// Jump if lower or equal (i.e. not greater)
+    DISASM_BRANCH_JLE = DISASM_BRANCH_JNG,
+    /// Jump if greater or equal (i.e. not lower)
+    DISASM_BRANCH_JGE = DISASM_BRANCH_JNL,
 
-    DISASM_BRANCH_JECXZ = 10,
+    /// Jump if CX is zero
+    DISASM_BRANCH_JCXZ = 10,
+    /// Jump if ECX is zero
+    DISASM_BRANCH_JECXZ = 11,
+    /// Jump if RCX is zero
+    DISASM_BRANCH_JRCXZ = 12,
 
-    DISASM_BRANCH_JMP = 11,
-    DISASM_BRANCH_CALL = 12,
-    DISASM_BRANCH_RET = 13,
-
-    DISASM_BRANCH_JCXZ = 14,
-    DISASM_BRANCH_JRCXZ = 15
+    DISASM_BRANCH_JMP = 13,
+    DISASM_BRANCH_CALL = 14,
+    DISASM_BRANCH_RET = 15
 } DisasmBranchType;
 
 typedef enum {
@@ -258,35 +294,52 @@ typedef struct {
 } DisasmEFLAGS;
 
 typedef struct {
-    unsigned ARMSBit : 1;                   // ARM specific. Set to 1 if 'S' flag.
-    unsigned ARMWriteBack : 1;              // ARM specific: Set to 1 if writeback flag (!).
-    unsigned ARMSpecial : 1;                // ARM specific: Set to 1 if special flag (^).
-    unsigned ARMThumb : 1;                  // ARM specifig: Set to 1 if thumb instruction.
+    /// ARM specific. Set to 1 if 'S' flag.
+    unsigned ARMSBit : 1;
+    /// ARM specific: Set to 1 if writeback flag (!).
+    unsigned ARMWriteBack : 1;
+    /// ARM specific: Set to 1 if special flag (^).
+    unsigned ARMSpecial : 1;
+    /// ARM specifig: Set to 1 if thumb instruction.
+    unsigned ARMThumb : 1;
 
-    unsigned changeNextInstrMode : 1;       // The instruction may change the next instruction CPU mode.
+    /// The instruction may change the next instruction CPU mode.
+    unsigned changeNextInstrMode : 1;
 } DisasmInstrFlags;
 
 /// Define a memory access in the form [BASE_REGISTERS + (INDEX_REGISTERS) * SCALE + DISPLACEMENT]
 typedef struct {
-    uint64_t    baseRegistersMask;                  /// Mask of the base registers used
-    uint64_t    indexRegistersMask;                 /// Mask of the index registers used
-    int32_t     scale;                              /// Scale (1, 2, 4, 8, ...)
-    int64_t     displacement;                       /// Displacement
+    /// Mask of the base registers used
+    uint64_t    baseRegistersMask;
+    /// Mask of the index registers used
+    uint64_t    indexRegistersMask;
+    /// Scale (1, 2, 4, 8, ...)
+    int32_t     scale;
+    /// Displacement
+    int64_t     displacement;
 } DisasmMemoryAccess;
 
 typedef struct  {
-    char                mnemonic[32];               /// Instruction mnemonic, with its optional condition.
+    /// Instruction mnemonic, with its optional condition.
+    char                mnemonic[32];
 
-    char                unconditionalMnemonic[32];  /// Mnemonic string without the conditional part.
-    DisasmCondition     condition;                  /// Condition to be met to execute instruction.
+    /// Mnemonic string without the conditional part.
+    char                unconditionalMnemonic[32];
+    /// Condition to be met to execute instruction.
+    DisasmCondition     condition;
 
-    uintptr_t           userData;                   /// A field that you can use internally to keep information on the instruction. Hopper don't need it.
+    /// A field that you can use internally to keep information on the instruction. Hopper don't need
+    uintptr_t           userData;
 
-    uint8_t             length;                     /// Length in bytes of the instruction encoding.
+    /// Length in bytes of the instruction encoding.
+    uint8_t             length;
 
-    DisasmBranchType    branchType;                 /// Information on the type of branch this instruction can perform.
-    DisasmEFLAGS        eflags;                     /// Information on the CPU state register after this instruction is executed.
-    Address             addressValue;               /// A value computed from one of the operands, known to point to an address.
+    /// Information on the type of branch this instruction can perform.
+    DisasmBranchType    branchType;
+    /// Information on the CPU state register after this instruction is executed.
+    DisasmEFLAGS        eflags;
+    /// A value computed from one of the operands, known to point to an address.
+    Address             addressValue;
 
     /// The value of the PC register at this address.
     /// For instance, on the Intel processor, it will be the address of the instruction + the length of the instruction.
@@ -298,30 +351,45 @@ typedef struct  {
 } DisasmInstruction;
 
 typedef struct {
-    DisasmOperandType  type;                            /// Mask of DISASM_OPERAND_* values.
-    uint32_t           size;                            /// Argument size in bits. In the case of a memory access, this is the size of the read or written value.
-    DisasmAccessMode   accessMode;                      /// Whether the operand is accessed for reading or writing. DISASM_ACCESS_READ / DISASM_ACCESS_WRITE
+    /// Mask of DISASM_OPERAND_* values.
+    DisasmOperandType  type;
+    /// Argument size in bits. In the case of a memory access, this is the size of the read or written value.
+    uint32_t           size;
+    /// Whether the operand is accessed for reading or writing. DISASM_ACCESS_READ / DISASM_ACCESS_WRITE
+    DisasmAccessMode   accessMode;
 
-    DisasmPosition     position;                        /// DISASM_HIGHPOSITION / DISASM_LOWPOSITION: high position if for 8bits registers AH, BH, CH, DH
+    /// DISASM_HIGHPOSITION / DISASM_LOWPOSITION: high position if for 8bits registers AH, BH, CH, DH
+    DisasmPosition     position;
 
-    DisasmSegmentReg   segmentReg;                      /// X86 specific: the segment register used for the memory access.
-    DisasmMemoryAccess memory;                          /// Description of the memory indirection.
-    int8_t             memoryDecoration;                /// Used for decoration on memory operands, like "dword ptr"… This is a plugin specific value, Hopper don't need it.
+    /// X86 specific: the segment register used for the memory access.
+    DisasmSegmentReg   segmentReg;
+    /// Description of the memory indirection.
+    DisasmMemoryAccess memory;
+    /// Used for decoration on memory operands, like "dword ptr"… This is a plugin specific value, Hopper doesn't need it.
+    int8_t             memoryDecoration;
 
     /// Shifting used when the type is DISASM_OPERAND_REGISTER_TYPE
-    DisasmShiftMode    shiftMode;                       /// Shifting mode
-    DisasmExtMode      extMode;                         /// Extension mode
-    int32_t            shiftAmount;                     /// Shifting amount (if not shifted by a register)
-    int32_t            shiftByReg;                      /// Shifting register
+    /// Shifting mode
+    DisasmShiftMode    shiftMode;
+    /// Extension mode
+    DisasmExtMode      extMode;
+    /// Shifting amount (if not shifted by a register)
+    int32_t            shiftAmount;
+    /// Shifting register
+    int32_t            shiftByReg;
 
     union {
-        int64_t            immediateValue;              /// The immediate value for this operand, if known.
+        /// The immediate value for this operand, if known.
+        int64_t            immediateValue;
         double             immediateDoubleValue;
     };
-    uint8_t            isBranchDestination;             /// A value different from 0 if the operand is used to compute a destination address for a branch instruction
+
+    /// A value different from 0 if the operand is used to compute a destination address for a branch instruction
+    uint8_t            isBranchDestination;
 
     union {
-        uint64_t       userData[DISASM_MAX_USER_DATA];  /// You can use this field to store important informations, Hopper will not use it.
+        /// You can use this field to store important informations, Hopper will not use it.
+        uint64_t       userData[DISASM_MAX_USER_DATA];
         char           userString[DISASM_MAX_USER_DATA * 8];
     };
 } DisasmOperand;
