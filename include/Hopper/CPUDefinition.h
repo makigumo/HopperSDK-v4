@@ -50,7 +50,7 @@
 /// Returns true for each special registers, like "CRx" or "DRx" X86 registers for instance
 - (BOOL)registerHasSideEffectForIndex:(NSUInteger)reg andClass:(RegClass)reg_class;
 
-// Returns the name of the frame pointer register, ie, "bp" for x86, or "r7" for ARM.
+/// Returns the name of the frame pointer register, ie, "bp" for x86, or "r7" for ARM.
 - (nullable NSString *)framePointerRegisterNameForFile:(nonnull NSObject<HPDisassembledFile>*)file cpuMode:(uint8_t)cpuMode;
 
 /// Returns a array of bytes that represents a NOP instruction of a given size.
