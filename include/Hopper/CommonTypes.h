@@ -285,7 +285,37 @@ HP_BEGIN_DECL_ENUM(NSUInteger, CallingConvention) {
     CallingConvention_AAPCS_VFP,
     
     CallingConvention_X86_64SysV = 20,
-    CallingConvention_X86_64Win64
+    CallingConvention_X86_64Win64,
+
+    // Special calling convention used by the Objective-C runtime
+    CallingConvention_AARCH64_arg0_x1 = 40,
+    CallingConvention_AARCH64_arg0_x2,
+    CallingConvention_AARCH64_arg0_x3,
+    CallingConvention_AARCH64_arg0_x4,
+    CallingConvention_AARCH64_arg0_x5,
+    CallingConvention_AARCH64_arg0_x6,
+    CallingConvention_AARCH64_arg0_x7,
+    CallingConvention_AARCH64_arg0_x8,
+    CallingConvention_AARCH64_arg0_x9,
+    CallingConvention_AARCH64_arg0_x10,
+    CallingConvention_AARCH64_arg0_x11,
+    CallingConvention_AARCH64_arg0_x12,
+    CallingConvention_AARCH64_arg0_x13,
+    CallingConvention_AARCH64_arg0_x14,
+    CallingConvention_AARCH64_arg0_x15,
+    CallingConvention_AARCH64_arg0_x16,
+    CallingConvention_AARCH64_arg0_x17,
+    CallingConvention_AARCH64_arg0_x18,
+    CallingConvention_AARCH64_arg0_x19,
+    CallingConvention_AARCH64_arg0_x20,
+    CallingConvention_AARCH64_arg0_x21,
+    CallingConvention_AARCH64_arg0_x22,
+    CallingConvention_AARCH64_arg0_x23,
+    CallingConvention_AARCH64_arg0_x24,
+    CallingConvention_AARCH64_arg0_x25,
+    CallingConvention_AARCH64_arg0_x26,
+    CallingConvention_AARCH64_arg0_x27,
+    CallingConvention_AARCH64_arg0_x28
 }
 HP_END_DECL_ENUM(CallingConvention);
 
