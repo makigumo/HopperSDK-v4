@@ -193,7 +193,9 @@ HP_BEGIN_DECL_ENUM(NSUInteger, RegClass) {
     RegClass_Variable = 100,
     RegClass_Argument = 101,
     RegClass_Temporaries = 102,
-    RegClass_Special = 103
+    RegClass_TempIndex = 104,
+    RegClass_TempBool = 103,
+    RegClass_Special = 105
 }
 HP_END_DECL_ENUM(RegClass);
 
@@ -283,7 +285,8 @@ HP_BEGIN_DECL_ENUM(NSUInteger, CallingConvention) {
     
     CallingConvention_AAPCS = 10,
     CallingConvention_AAPCS_VFP,
-    
+    CallingConvention_Swift,
+
     CallingConvention_X86_64SysV = 20,
     CallingConvention_X86_64Win64,
 
