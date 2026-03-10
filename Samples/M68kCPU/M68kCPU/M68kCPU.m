@@ -136,7 +136,7 @@ void OSWriteBigInt16(void *address, uintptr_t offset, int16_t data) {
 }
 
 - (BOOL)registerIndexIsStackPointer:(NSUInteger)reg ofClass:(RegClass)reg_class cpuMode:(uint8_t)cpuMode file:(NSObject<HPDisassembledFile> *)file {
-    return reg_class == RegClass_AddressRegister && reg == 7;
+    return (M68kRegClass) reg_class == RegClass_AddressRegister && reg == 7;
 }
 
 - (BOOL)registerIndexIsFrameBasePointer:(NSUInteger)reg ofClass:(RegClass)reg_class cpuMode:(uint8_t)cpuMode file:(NSObject<HPDisassembledFile> *)file {

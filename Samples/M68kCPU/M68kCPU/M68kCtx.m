@@ -303,7 +303,7 @@ static inline RegClass capstoneRegisterToRegClass(m68k_reg reg) {
                 hop_op->type = DISASM_OPERAND_MEMORY_TYPE;
 
                 if (registerIndirect) {
-                    hop_op->type |= DISASM_BUILD_REGISTER_CLS_MASK((baseIsPC ? RegClass_AddressRegister : RegClass_GeneralPurposeRegister));
+                    hop_op->type |= DISASM_BUILD_REGISTER_CLS_MASK((baseIsPC ? RegClass_AddressRegister : (M68kRegClass) RegClass_GeneralPurposeRegister));
                     m68k_reg base = (baseIsPC ? M68K_REG_PC : op->mem.base_reg);
                     uint64_t mask = DISASM_BUILD_REGISTER_INDEX_MASK(capstoneRegisterToRegIndex(base));
                     hop_op->type |= mask;
