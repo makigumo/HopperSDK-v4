@@ -25,6 +25,8 @@ typedef struct {
     size_t  len;
 } AddressRange;
 
+static inline AddressRange HPAddressRangeMake(Address from, size_t len) { AddressRange r = {from, len}; return r; }
+
 #define BAD_ADDRESS     ((Address)-1)
 
 // Colors
